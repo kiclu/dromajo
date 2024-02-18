@@ -81,7 +81,7 @@ typedef int64_t  target_long;
 /* FLEN is the floating point register width */
 #if FLEN > 0
 #if FLEN == 32
-typedef uint64_t fp_uint;
+typedef uint32_t fp_uint;
 #define F32_HIGH 0
 #elif FLEN == 64
 typedef uint64_t fp_uint;
@@ -138,7 +138,7 @@ typedef uint128_t fp_uint;
 #endif
 
 #if MLEN == 32
-typedef uint64_t mem_uint_t;
+typedef uint32_t mem_uint_t;
 #elif MLEN == 64
 typedef uint64_t mem_uint_t;
 #elif MLEN == 128
@@ -209,7 +209,7 @@ typedef struct RISCVCPUState {
 #if FLEN > 0
     fp_uint  fp_reg[32];
     int      most_recently_written_fp_reg;
-    uint64_t fflags;
+    uint32_t fflags;
     uint8_t  frm;
 #endif
 
@@ -288,7 +288,7 @@ typedef struct RISCVCPUState {
     target_ulong dpc;       // Debug DPC 0x7b1 (debug spec only)
     target_ulong dscratch;  // Debug dscratch 0x7b2 (debug spec only)
 
-    uint64_t plic_enable_irq[2];
+    uint32_t plic_enable_irq[2];
 
     /*
      * "The SC must fail if a store to the reservation set from
@@ -334,11 +334,11 @@ RISCVCPUState *riscv_cpu_init(RISCVMachine *machine, int hartid);
 void           riscv_cpu_end(RISCVCPUState *s);
 int            riscv_cpu_interp(RISCVCPUState *s, int n_cycles);
 uint64_t       riscv_cpu_get_cycles(RISCVCPUState *s);
-void           riscv_cpu_set_mip(RISCVCPUState *s, uint64_t mask);
-void           riscv_cpu_reset_mip(RISCVCPUState *s, uint64_t mask);
-uint64_t       riscv_cpu_get_mip(RISCVCPUState *s);
+void           riscv_cpu_set_mip(RISCVCPUState *s, uint32_t mask);
+void           riscv_cpu_reset_mip(RISCVCPUState *s, uint32_t mask);
+uint32_t       riscv_cpu_get_mip(RISCVCPUState *s);
 BOOL           riscv_cpu_get_power_down(RISCVCPUState *s);
-uint64_t       riscv_cpu_get_misa(RISCVCPUState *s);
+uint32_t       riscv_cpu_get_misa(RISCVCPUState *s);
 void           riscv_cpu_flush_tlb_write_range_ram(RISCVCPUState *s, uint8_t *ram_ptr, size_t ram_size);
 void           riscv_set_pc(RISCVCPUState *s, uint64_t pc);
 uint64_t       riscv_get_pc(RISCVCPUState *s);
@@ -347,8 +347,8 @@ uint64_t       riscv_get_reg_previous(RISCVCPUState *s, int rn);
 uint64_t       riscv_get_fpreg(RISCVCPUState *s, int rn);
 void           riscv_set_reg(RISCVCPUState *s, int rn, uint64_t val);
 void           riscv_dump_regs(RISCVCPUState *s);
-int            riscv_read_insn(RISCVCPUState *s, uint64_t *insn, uint64_t addr);
-void           riscv_repair_csr(RISCVCPUState *s, uint64_t reg_num, uint64_t csr_num, uint64_t csr_val);
+int            riscv_read_insn(RISCVCPUState *s, uint32_t *insn, uint64_t addr);
+void           riscv_repair_csr(RISCVCPUState *s, uint32_t reg_num, uint64_t csr_num, uint64_t csr_val);
 void           riscv_cpu_sync_regs(RISCVCPUState *s);
 int            riscv_get_priv_level(RISCVCPUState *s);
 int            riscv_get_most_recently_written_reg(RISCVCPUState *s);
@@ -374,7 +374,7 @@ int riscv_cpu_write_memory(RISCVCPUState *s, target_ulong addr, mem_uint_t val, 
     uint_type riscv_phys_read_u##size(RISCVCPUState *, target_ulong, bool *);
 
 PHYS_MEM_READ_WRITE(8, uint8_t)
-PHYS_MEM_READ_WRITE(32, uint64_t)
+PHYS_MEM_READ_WRITE(32, uint32_t)
 PHYS_MEM_READ_WRITE(64, uint64_t)
 
 #undef PHYS_MEM_READ_WRITE
