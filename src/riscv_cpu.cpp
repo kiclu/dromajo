@@ -1663,9 +1663,7 @@ static int csr_write(RISCVCPUState *s, uint32_t funct3, uint32_t csr, target_ulo
             return 2;
 
         case 0x300: set_mstatus(s, val); break;
-        case 0x301: /* misa */
-            /* We don't support changing misa */
-            break;
+        case 0x301: s->misa = val; break;
         case 0x302: {
             target_ulong mask = 0xB109;  // matching Spike
             s->medeleg        = s->medeleg & ~mask | val & mask;
